@@ -7,7 +7,6 @@
 /storage/pail
 /storage/api-docs/api-docs.json
 /vendor
-/docker/mysql/dbdata
 .cache
 *.log
 .env
@@ -26,4 +25,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-./.composer/cache/**/*.json
+.composer/cache
