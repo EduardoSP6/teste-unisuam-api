@@ -37,3 +37,17 @@ php artisan migrate --seed
 ```
 composer analyse
 ```
+
+- **Github API Client Secret:**
+
+Para o projeto funcionar de acordo com o rate limit do Github, 
+será necessário gerar um token para autenticação.
+
+Para isso, acesse sua conta do Github e vá até Configurações → Desenvolvedor → Tokens de Acesso Pessoal.
+Clique em "Gerar novo token" e selecione os escopos necessários.
+Copie o token e insira no arquivo .env, na variável **GITHUB_API_CLIENT_SECRET.**
+
+E por fim, execute o comando abaixo para atualizar o cache da aplicação:
+```
+php artisan optimize
+```

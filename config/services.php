@@ -35,4 +35,7 @@ return [
         ],
     ],
 
+    'github' => [
+        'client_secret' => env('GITHUB_API_CLIENT_SECRET'),
+    ],
 ];

@@ -3,11 +3,12 @@
 namespace Domain\Core\Entity;
 
 use DateTimeImmutable;
+use Domain\Core\Interfaces\GithubUserInterface;
 use Domain\Shared\Entity\BaseEntity;
 use Domain\Shared\ValueObject\Id;
 use InvalidArgumentException;
 
-class GithubUser extends BaseEntity
+class GithubUser extends BaseEntity implements GithubUserInterface
 {
     private Id $id;
     private ?string $avatarUrl;
@@ -23,7 +24,10 @@ class GithubUser extends BaseEntity
     private DateTimeImmutable $createdAt;
     private DateTimeImmutable|null $updatedAt;
 
-    public function __construct(Id $id, ?string $avatarUrl, string $username, ?string $bio, string $githubUrl, ?string $blogUrl, ?string $company, ?string $location, int $publicRepositories, int $followers, int $followings, DateTimeImmutable $createdAt, ?DateTimeImmutable $updatedAt = null)
+    /** @var GithubUserInterface[] $followingUsers */
+    private array $followingUsers;
+
+    public function __construct(Id $id, ?string $avatarUrl, string $username, ?string $bio, string $githubUrl, ?string $blogUrl, ?string $company, ?string $location, int $publicRepositories, int $followers, int $followings, DateTimeImmutable $createdAt, ?DateTimeImmutable $updatedAt = null, array $followingUsers = [])
     {
         parent::__construct($id, $createdAt, $updatedAt);
 
@@ -40,6 +44,7 @@ class GithubUser extends BaseEntity
         $this->followings = $followings;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+        $this->followingUsers = $followingUsers;
 
         $this->validate();
     }
@@ -194,5 +199,22 @@ class GithubUser extends BaseEntity
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return GithubUserInterface[]
+     */
+    public function getFollowingUsers(): array
+    {
+        return $this->followingUsers;
+    }
+
+    /**
+     * @param GithubUserInterface $user
+     * @return void
+     */
+    public function addFollowing(GithubUserInterface $user): void
+    {
+        $this->followingUsers[] = $user;
     }
 }
