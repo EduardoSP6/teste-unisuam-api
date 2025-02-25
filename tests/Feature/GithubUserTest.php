@@ -8,7 +8,7 @@ class GithubUserTest extends TestCase
 {
     public function test_it_should_find_a_github_user_successfully(): void
     {
-        $username = "eduardosp6";
+        $username = "joaorca";
 
         $response = $this
             ->withHeaders([
@@ -28,16 +28,6 @@ class GithubUserTest extends TestCase
             "publicRepositories",
             "followers",
             "followings",
-            "followingUsers" => [
-                "*" => [
-                    "avatar",
-                    "name",
-                    "username",
-                    "bio",
-                    "company",
-                    "location",
-                ],
-            ],
         ]);
     }
 }

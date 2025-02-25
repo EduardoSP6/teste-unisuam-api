@@ -25,10 +25,7 @@ class GithubUser extends BaseEntity implements GithubUserInterface
     private DateTimeImmutable $createdAt;
     private DateTimeImmutable|null $updatedAt;
 
-    /** @var GithubUserInterface[] $followingUsers */
-    private array $followingUsers;
-
-    public function __construct(Id $id, ?string $avatarUrl, string $username, ?string $name, ?string $bio, string $githubUrl, ?string $blogUrl, ?string $company, ?string $location, int $publicRepositories, int $followers, int $followings, DateTimeImmutable $createdAt, ?DateTimeImmutable $updatedAt = null, array $followingUsers = [])
+    public function __construct(Id $id, ?string $avatarUrl, string $username, ?string $name, ?string $bio, string $githubUrl, ?string $blogUrl, ?string $company, ?string $location, int $publicRepositories, int $followers, int $followings, DateTimeImmutable $createdAt, ?DateTimeImmutable $updatedAt = null)
     {
         parent::__construct($id, $createdAt, $updatedAt);
 
@@ -46,7 +43,6 @@ class GithubUser extends BaseEntity implements GithubUserInterface
         $this->followings = $followings;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
-        $this->followingUsers = $followingUsers;
 
         $this->validate();
     }
@@ -208,22 +204,5 @@ class GithubUser extends BaseEntity implements GithubUserInterface
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * @return GithubUserInterface[]
-     */
-    public function getFollowingUsers(): array
-    {
-        return $this->followingUsers;
-    }
-
-    /**
-     * @param GithubUserInterface $user
-     * @return void
-     */
-    public function addFollowing(GithubUserInterface $user): void
-    {
-        $this->followingUsers[] = $user;
     }
 }

@@ -23,7 +23,7 @@ class GithubUserRepository implements GithubUserRepositoryInterface
 
         if (!$userOutputDto) return null;
 
-        $githubUser = new GithubUser(
+        return new GithubUser(
             id: new Id($userOutputDto->id),
             avatarUrl: $userOutputDto->avatarUrl,
             username: $userOutputDto->username,
@@ -39,27 +39,28 @@ class GithubUserRepository implements GithubUserRepositoryInterface
             createdAt: $userOutputDto->createdAt,
             updatedAt: $userOutputDto->updatedAt
         );
+    }
 
-        if ($githubUser->getFollowings() > 0) {
-            $followingsOutputDto = $this->githubGateway->listFollowings($githubUser->getUsername());
+    public function listFollowingUsers(string $username): array
+    {
+        $followingsOutputDto = $this->githubGateway->listFollowings($username);
 
-            if (count($followingsOutputDto) > 0) {
-                foreach ($followingsOutputDto as $fUserDto) {
-                    $followingUser = new GithubFollowingUser(
-                        id: new Id($fUserDto->id),
-                        name: $fUserDto->name,
-                        username: $fUserDto->username,
-                        avatarUrl: $fUserDto->avatarUrl,
-                        bio: $fUserDto->bio,
-                        company: $fUserDto->company,
-                        location: $fUserDto->location,
-                    );
+        if (count($followingsOutputDto) === 0) return [];
 
-                    $githubUser->addFollowing($followingUser);
-                }
-            }
+        $followingUsers = [];
+
+        foreach ($followingsOutputDto as $fUserDto) {
+            $followingUsers[] = new GithubFollowingUser(
+                id: new Id($fUserDto->id),
+                name: $fUserDto->name,
+                username: $fUserDto->username,
+                avatarUrl: $fUserDto->avatarUrl,
+                bio: $fUserDto->bio,
+                company: $fUserDto->company,
+                location: $fUserDto->location,
+            );
         }
 
-        return $githubUser;
+        return $followingUsers;
     }
 }

@@ -18,8 +18,6 @@ class GithubUserResource extends JsonResource
 
     public function toArray(Request $request): array
     {
-        $followingUsers = $this->githubUser->getFollowingUsers();
-
         return [
             'avatar' => $this->githubUser->getAvatarUrl(),
             'name' => $this->githubUser->getName(),
@@ -32,7 +30,6 @@ class GithubUserResource extends JsonResource
             'publicRepositories' => $this->githubUser->getPublicRepositories(),
             'followers' => $this->githubUser->getFollowers(),
             'followings' => $this->githubUser->getFollowings(),
-            'followingUsers' => count($followingUsers) > 0 ? GithubFollowingResource::collection($followingUsers) : [],
         ];
     }
 }

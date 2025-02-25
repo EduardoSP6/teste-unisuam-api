@@ -26,7 +26,7 @@ class GithubUserRepositoryTest extends TestCase
         unset($this->githubUserRepository);
     }
 
-    public function test_it_should_find_a_github_user_with_followings_successfully()
+    public function test_it_should_find_a_github_user_successfully()
     {
         $username = "joaorca";
 
@@ -35,9 +35,18 @@ class GithubUserRepositoryTest extends TestCase
         $this->assertNotNull($githubUser);
         $this->assertInstanceOf(GithubUser::class, $githubUser);
         $this->assertEquals($username, $githubUser->getUsername());
-        $this->assertGreaterThan(5, $githubUser->getFollowingUsers());
+    }
 
-        foreach ($githubUser->getFollowingUsers() as $followingUser) {
+    public function test_it_should_list_github_user_followings_successfully()
+    {
+        $username = "joaorca";
+
+        $followingUsers = $this->githubUserRepository->listFollowingUsers($username);
+
+        $this->assertIsArray($followingUsers);
+        $this->assertGreaterThan(0, count($followingUsers));
+
+        foreach ($followingUsers as $followingUser) {
             $this->assertInstanceOf(GithubFollowingUser::class, $followingUser);
         }
     }

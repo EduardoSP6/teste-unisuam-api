@@ -9,6 +9,7 @@ use Application\UseCases\GithubUsers\Find\FindGithubUserUseCase;
 use Exception;
 use Infrastructure\Gateways\GithubHttpGateway;
 use Infrastructure\Repositories\GithubUserRepository;
+use InvalidArgumentException;
 
 class GithubUserController extends Controller
 {
@@ -33,6 +34,8 @@ class GithubUserController extends Controller
             return GithubUserResource::make($outputDto->githubUser);
         } catch (UserNotFoundException) {
             abort(404, "Usuário não encontrado");
+        } catch (InvalidArgumentException $e) {
+            abort(400, $e->getMessage());
         } catch (Exception) {
             abort(500, "Internal server error");
         }

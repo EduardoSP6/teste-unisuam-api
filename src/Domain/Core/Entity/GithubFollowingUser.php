@@ -4,6 +4,7 @@ namespace Domain\Core\Entity;
 
 use Domain\Core\Interfaces\GithubUserInterface;
 use Domain\Shared\ValueObject\Id;
+use InvalidArgumentException;
 
 class GithubFollowingUser implements GithubUserInterface
 {
@@ -24,6 +25,25 @@ class GithubFollowingUser implements GithubUserInterface
         $this->bio = $bio;
         $this->company = $company;
         $this->location = $location;
+
+        $this->validate();
+    }
+
+    protected function validate(): void
+    {
+        throw_if(
+            empty(trim($this->username)),
+            new InvalidArgumentException("Username can not be empty")
+        );
+
+        if (!empty($this->avatarUrl)) {
+            throw_if(
+                filter_var($this->avatarUrl,
+                    FILTER_VALIDATE_URL,
+                    FILTER_FLAG_PATH_REQUIRED) === false,
+                new InvalidArgumentException("Invalid avatar url")
+            );
+        }
     }
 
     /**
