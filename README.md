@@ -29,7 +29,7 @@ php artisan key:generate
 - Criar as tabelas e seed do banco de dados:
 
 ```
-php artisan migrate --seed
+php artisan migrate
 ```
 
 - Executar análise estática do código com PHP-Stan:
@@ -50,4 +50,12 @@ Copie o token e insira no arquivo .env, na variável **GITHUB_API_CLIENT_SECRET.
 E por fim, execute o comando abaixo para atualizar o cache da aplicação:
 ```
 php artisan optimize
+```
+
+- Documentação da API:
+
+Execute o comando abaixo para gerar a documentação da API. 
+Após gerar, basta acessar a URL: http://localhost:8000/api/documentation
+```
+php artisan l5-swagger:generate
 ```

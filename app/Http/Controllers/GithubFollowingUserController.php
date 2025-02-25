@@ -9,6 +9,7 @@ use Exception;
 use Infrastructure\Gateways\GithubHttpGateway;
 use Infrastructure\Persistence\Repositories\InMemory\GithubUserRepository;
 use InvalidArgumentException;
+use OpenApi\Annotations as OA;
 
 class GithubFollowingUserController extends Controller
 {
@@ -19,6 +20,24 @@ class GithubFollowingUserController extends Controller
         $this->githubUserRepository = new GithubUserRepository(new GithubHttpGateway());
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/github-users/{username}/followings",
+     *     operationId="listFollowingUsers",
+     *     tags={"GithubUsers"},
+     *     summary="Lista todos usuários seguidos.",
+     *     description="Lista todos usuários seguidos.",
+     *
+     *     @OA\Response(
+     *          response="200",
+     *          description="OK",
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(ref="#/components/schemas/GithubFollowingResource")
+     *          ),
+     *     ),
+     * )
+     */
     public function index(string $username)
     {
         try {
