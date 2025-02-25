@@ -8,7 +8,7 @@ use Application\UseCases\GithubUsers\Find\FindGithubUserInputDto;
 use Application\UseCases\GithubUsers\Find\FindGithubUserUseCase;
 use Exception;
 use Infrastructure\Gateways\GithubHttpGateway;
-use Infrastructure\Repositories\GithubUserRepository;
+use Infrastructure\Persistence\Repositories\InMemory\GithubUserRepository;
 use InvalidArgumentException;
 
 class GithubUserController extends Controller

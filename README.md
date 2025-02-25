@@ -32,7 +32,7 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-- Executar análise estática do código com PHP-Stan (Opcional):
+- Executar análise estática do código com PHP-Stan:
 
 ```
 composer analyse

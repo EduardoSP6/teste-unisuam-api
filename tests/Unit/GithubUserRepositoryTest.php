@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use Domain\Core\Entity\GithubFollowingUser;
 use Domain\Core\Entity\GithubUser;
 use Infrastructure\Gateways\GithubHttpGateway;
-use Infrastructure\Repositories\GithubUserRepository;
+use Infrastructure\Persistence\Repositories\InMemory\GithubUserRepository;
 use Tests\TestCase;
 
 class GithubUserRepositoryTest extends TestCase

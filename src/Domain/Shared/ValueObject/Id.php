@@ -8,7 +8,7 @@ class Id
 
     public function __construct(?int $id = null)
     {
-        $this->id = $id;
+        $this->id = $id ?? rand(1, 9999999);
     }
 
     public function value(): int

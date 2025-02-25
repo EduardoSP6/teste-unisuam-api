@@ -7,7 +7,7 @@ use Application\UseCases\GithubUsers\ListFollowingUsers\ListGithubFollowingUsers
 use Application\UseCases\GithubUsers\ListFollowingUsers\ListGithubFollowingUsersUseCase;
 use Exception;
 use Infrastructure\Gateways\GithubHttpGateway;
-use Infrastructure\Repositories\GithubUserRepository;
+use Infrastructure\Persistence\Repositories\InMemory\GithubUserRepository;
 use InvalidArgumentException;
 
 class GithubFollowingUserController extends Controller

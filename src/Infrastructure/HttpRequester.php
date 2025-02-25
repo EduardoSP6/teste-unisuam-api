@@ -2,19 +2,36 @@
 
 namespace Infrastructure;
 
+use Application\Interfaces\RequestLogRepositoryInterface;
+use DateTimeImmutable;
+use Domain\Core\Entity\RequestLog;
+use Domain\Core\Enum\RequestLogType;
+use Domain\Shared\ValueObject\Id;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Infrastructure\Persistence\Repositories\Eloquent\RequestLogEloquentRepository;
 use InvalidArgumentException;
 
 class HttpRequester
 {
-    protected const REQUEST_LOG = 'REQUEST_API_LOG';
-    protected const REQUEST_ERROR = 'REQUEST_API_ERROR';
     protected const AUTH_HEADER_NAME = 'Authorization';
 
+    private RequestLogRepositoryInterface $requestLogRepository;
+
+    public function __construct()
+    {
+        $this->requestLogRepository = new RequestLogEloquentRepository();
+    }
+
+    /**
+     * @param string $baseUrl
+     * @param string|null $tokenPrefix
+     * @param string|null $token
+     * @param string|null $authHeaderName
+     * @return PendingRequest
+     */
     public function prepareRequest(
         string      $baseUrl,
         string|null $tokenPrefix = null,
@@ -43,36 +60,74 @@ class HttpRequester
 
         $request = Http::baseUrl($baseUrl)->withHeaders($headers);
 
+        // log the request
         $request->beforeSending(function (Request $callback) {
-            Log::info(self::REQUEST_LOG, [
-                'type' => 'REQUEST',
-                'method' => $callback->method(),
-                'api' => $callback->url(),
-                'content' => $callback->body()
-            ]);
+            $requestLog = new RequestLog(
+                id: new Id(),
+                type: RequestLogType::REQUEST,
+                url: $callback->url(),
+                method: $callback->method(),
+                status: null,
+                payload: $callback->data(),
+                createdAt: new DateTimeImmutable(),
+            );
+
+            $this->saveLog($requestLog);
         });
 
         return $request;
     }
 
+    /**
+     * @param Response $response
+     * @return Response
+     */
     public function getResponse(Response $response): Response
     {
+        // handle response error
         $response->onError(function (Response $callback) {
-            Log::error(self::REQUEST_ERROR, [
-                'type' => 'ERROR',
-                'status' => $callback->status(),
-                'api' => isset($callback->handlerStats()['url']) ? $callback->handlerStats()['url'] : '',
-                'content' => $callback->json()
-            ]);
+            $url = isset($callback->handlerStats()['url']) ? $callback->handlerStats()['url'] : '';
+
+            $requestLog = new RequestLog(
+                id: new Id(),
+                type: RequestLogType::RESPONSE,
+                url: $url,
+                method: null,
+                status: $callback->status(),
+                payload: $callback->json(),
+                createdAt: new DateTimeImmutable(),
+                error: $callback->reason()
+            );
+
+            $this->saveLog($requestLog);
         });
 
-        Log::info(self::REQUEST_LOG, [
-            'type' => 'RESPONSE',
-            'status' => $response->status(),
-            'api' => isset($response->handlerStats()['url']) ? $response->handlerStats()['url'] : '',
-            'content' => $response->body()
-        ]);
+        // handle response data
+        $url = isset($response->handlerStats()['url']) ? $response->handlerStats()['url'] : '';
+
+        $requestLog = new RequestLog(
+            id: new Id(),
+            type: RequestLogType::RESPONSE,
+            url: $url,
+            method: null,
+            status: $response->status(),
+            payload: $response->json(),
+            createdAt: new DateTimeImmutable(),
+        );
+
+        $this->saveLog($requestLog);
 
         return $response;
+    }
+
+    /**
+     * Save the request calls log in database.
+     *
+     * @param RequestLog $requestLog
+     * @return void
+     */
+    protected function saveLog(RequestLog $requestLog): void
+    {
+        $this->requestLogRepository->save($requestLog);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure\Repositories;
+namespace Infrastructure\Persistence\Repositories\InMemory;
 
 use Application\Interfaces\GithubGatewayInterface;
 use Application\Interfaces\GithubUserRepositoryInterface;
