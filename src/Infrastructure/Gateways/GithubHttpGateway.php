@@ -92,9 +92,4 @@ class GithubHttpGateway implements GithubGatewayInterface
 
         return $followings;
     }
-
-    public function findFollowingUser(string $username)
-    {
-
-    }
 }

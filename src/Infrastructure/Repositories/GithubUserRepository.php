@@ -4,6 +4,7 @@ namespace Infrastructure\Repositories;
 
 use Application\Interfaces\GithubGatewayInterface;
 use Application\Interfaces\GithubUserRepositoryInterface;
+use Domain\Core\Entity\GithubFollowingUser;
 use Domain\Core\Entity\GithubUser;
 use Domain\Shared\ValueObject\Id;
 
@@ -26,6 +27,7 @@ class GithubUserRepository implements GithubUserRepositoryInterface
             id: new Id($userOutputDto->id),
             avatarUrl: $userOutputDto->avatarUrl,
             username: $userOutputDto->username,
+            name: $userOutputDto->name,
             bio: $userOutputDto->bio,
             githubUrl: $userOutputDto->githubUrl,
             blogUrl: $userOutputDto->blogUrl,
@@ -42,8 +44,18 @@ class GithubUserRepository implements GithubUserRepositoryInterface
             $followingsOutputDto = $this->githubGateway->listFollowings($githubUser->getUsername());
 
             if (count($followingsOutputDto) > 0) {
-                foreach ($followingsOutputDto as $fUser) {
-                    $githubUser->addFollowing($fUser);
+                foreach ($followingsOutputDto as $fUserDto) {
+                    $followingUser = new GithubFollowingUser(
+                        id: new Id($fUserDto->id),
+                        name: $fUserDto->name,
+                        username: $fUserDto->username,
+                        avatarUrl: $fUserDto->avatarUrl,
+                        bio: $fUserDto->bio,
+                        company: $fUserDto->company,
+                        location: $fUserDto->location,
+                    );
+
+                    $githubUser->addFollowing($followingUser);
                 }
             }
         }

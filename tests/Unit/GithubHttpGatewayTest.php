@@ -29,7 +29,7 @@ class GithubHttpGatewayTest extends TestCase
     /**
      * @throws ConnectionException
      */
-    public function test_it_should_fail_to_find_user_with_no_existent_username()
+    public function test_it_should_fail_to_find_user_with_no_existent_username(): void
     {
         $username = uniqid("gh-");
 
@@ -41,7 +41,7 @@ class GithubHttpGatewayTest extends TestCase
     /**
      * @throws ConnectionException
      */
-    public function test_it_should_find_a_github_user_successfully()
+    public function test_it_should_find_a_github_user_successfully(): void
     {
         $username = "joaorca";
 

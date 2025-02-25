@@ -26,7 +26,7 @@ class GithubUserTest extends TestCase
         unset($this->faker);
     }
 
-    public function test_it_should_fail_to_create_a_github_user_with_empty_username()
+    public function test_it_should_fail_to_create_a_github_user_with_empty_username(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Username can not be empty");
@@ -35,6 +35,7 @@ class GithubUserTest extends TestCase
             id: new Id($this->faker->numberBetween(1)),
             avatarUrl: $this->faker->imageUrl,
             username: "   ",
+            name: $this->faker->name,
             bio: null,
             githubUrl: $this->faker->url,
             blogUrl: null,
@@ -47,7 +48,7 @@ class GithubUserTest extends TestCase
         );
     }
 
-    public function test_it_should_fail_to_create_a_github_user_with_invalid_avatar_url()
+    public function test_it_should_fail_to_create_a_github_user_with_invalid_avatar_url(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Invalid avatar url");
@@ -58,6 +59,7 @@ class GithubUserTest extends TestCase
             id: new Id($this->faker->numberBetween(1)),
             avatarUrl: $avatarUrl,
             username: $this->faker->userName,
+            name: $this->faker->name,
             bio: null,
             githubUrl: $this->faker->url,
             blogUrl: null,
@@ -70,7 +72,7 @@ class GithubUserTest extends TestCase
         );
     }
 
-    public function test_it_should_fail_to_create_a_github_user_with_invalid_github_url()
+    public function test_it_should_fail_to_create_a_github_user_with_invalid_github_url(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Invalid Github url");
@@ -81,6 +83,7 @@ class GithubUserTest extends TestCase
             id: new Id($this->faker->numberBetween(1)),
             avatarUrl: $this->faker->imageUrl,
             username: $this->faker->userName,
+            name: $this->faker->name,
             bio: null,
             githubUrl: $githubUrl,
             blogUrl: null,
@@ -93,17 +96,18 @@ class GithubUserTest extends TestCase
         );
     }
 
-    public function test_it_should_fail_to_create_a_github_user_with_invalid_blog_url()
+    public function test_it_should_fail_to_create_a_github_user_with_invalid_blog_url(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Invalid blog url");
 
-        $blogUrl = "http://iirno3n4r.com";
+        $blogUrl = "iirno3n4r.uhihu";
 
         new GithubUser(
             id: new Id($this->faker->numberBetween(1)),
             avatarUrl: $this->faker->imageUrl,
             username: $this->faker->userName,
+            name: $this->faker->name,
             bio: null,
             githubUrl: $this->faker->url,
             blogUrl: $blogUrl,
@@ -116,7 +120,7 @@ class GithubUserTest extends TestCase
         );
     }
 
-    public function test_it_should_fail_to_create_a_github_user_with_negative_public_repositories()
+    public function test_it_should_fail_to_create_a_github_user_with_negative_public_repositories(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Public repositories can not be negative");
@@ -127,6 +131,7 @@ class GithubUserTest extends TestCase
             id: new Id($this->faker->numberBetween(1)),
             avatarUrl: $this->faker->imageUrl,
             username: $this->faker->userName,
+            name: $this->faker->name,
             bio: null,
             githubUrl: $this->faker->url,
             blogUrl: $this->faker->url,
@@ -139,7 +144,7 @@ class GithubUserTest extends TestCase
         );
     }
 
-    public function test_it_should_fail_to_create_a_github_user_with_negative_followers()
+    public function test_it_should_fail_to_create_a_github_user_with_negative_followers(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Followers can not be negative");
@@ -150,6 +155,7 @@ class GithubUserTest extends TestCase
             id: new Id($this->faker->numberBetween(1)),
             avatarUrl: $this->faker->imageUrl,
             username: $this->faker->userName,
+            name: $this->faker->name,
             bio: null,
             githubUrl: $this->faker->url,
             blogUrl: $this->faker->url,
@@ -162,7 +168,7 @@ class GithubUserTest extends TestCase
         );
     }
 
-    public function test_it_should_fail_to_create_a_github_user_with_negative_followings()
+    public function test_it_should_fail_to_create_a_github_user_with_negative_followings(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Followings can not be negative");
@@ -173,6 +179,7 @@ class GithubUserTest extends TestCase
             id: new Id($this->faker->numberBetween(1)),
             avatarUrl: $this->faker->imageUrl,
             username: $this->faker->userName,
+            name: $this->faker->name,
             bio: null,
             githubUrl: $this->faker->url,
             blogUrl: $this->faker->url,
@@ -185,12 +192,13 @@ class GithubUserTest extends TestCase
         );
     }
 
-    public function test_it_should_create_a_github_user_successfully()
+    public function test_it_should_create_a_github_user_successfully(): void
     {
         $githubUser = new GithubUser(
             id: new Id($this->faker->numberBetween(1)),
             avatarUrl: $this->faker->imageUrl,
             username: $this->faker->userName,
+            name: $this->faker->name,
             bio: null,
             githubUrl: $this->faker->url,
             blogUrl: $this->faker->url,

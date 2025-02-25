@@ -13,6 +13,7 @@ class GithubUser extends BaseEntity implements GithubUserInterface
     private Id $id;
     private ?string $avatarUrl;
     private string $username;
+    private ?string $name;
     private ?string $bio;
     private string $githubUrl;
     private ?string $blogUrl;
@@ -27,13 +28,14 @@ class GithubUser extends BaseEntity implements GithubUserInterface
     /** @var GithubUserInterface[] $followingUsers */
     private array $followingUsers;
 
-    public function __construct(Id $id, ?string $avatarUrl, string $username, ?string $bio, string $githubUrl, ?string $blogUrl, ?string $company, ?string $location, int $publicRepositories, int $followers, int $followings, DateTimeImmutable $createdAt, ?DateTimeImmutable $updatedAt = null, array $followingUsers = [])
+    public function __construct(Id $id, ?string $avatarUrl, string $username, ?string $name, ?string $bio, string $githubUrl, ?string $blogUrl, ?string $company, ?string $location, int $publicRepositories, int $followers, int $followings, DateTimeImmutable $createdAt, ?DateTimeImmutable $updatedAt = null, array $followingUsers = [])
     {
         parent::__construct($id, $createdAt, $updatedAt);
 
         $this->id = $id;
         $this->avatarUrl = $avatarUrl;
         $this->username = $username;
+        $this->name = $name;
         $this->bio = $bio;
         $this->githubUrl = $githubUrl;
         $this->blogUrl = $blogUrl;
@@ -75,8 +77,7 @@ class GithubUser extends BaseEntity implements GithubUserInterface
         if (!empty($this->blogUrl)) {
             throw_if(
                 filter_var($this->blogUrl,
-                    FILTER_VALIDATE_URL,
-                    FILTER_FLAG_PATH_REQUIRED) === false,
+                    FILTER_VALIDATE_URL) === false,
                 new InvalidArgumentException("Invalid blog url")
             );
         }
@@ -119,6 +120,14 @@ class GithubUser extends BaseEntity implements GithubUserInterface
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 
     /**
