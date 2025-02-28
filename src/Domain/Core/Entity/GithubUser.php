@@ -14,6 +14,7 @@ class GithubUser extends BaseEntity implements GithubUserInterface
     private ?string $avatarUrl;
     private string $username;
     private ?string $name;
+    private ?string $email;
     private ?string $bio;
     private string $githubUrl;
     private ?string $blogUrl;
@@ -25,7 +26,7 @@ class GithubUser extends BaseEntity implements GithubUserInterface
     private DateTimeImmutable $createdAt;
     private DateTimeImmutable|null $updatedAt;
 
-    public function __construct(Id $id, ?string $avatarUrl, string $username, ?string $name, ?string $bio, string $githubUrl, ?string $blogUrl, ?string $company, ?string $location, int $publicRepositories, int $followers, int $followings, DateTimeImmutable $createdAt, ?DateTimeImmutable $updatedAt = null)
+    public function __construct(Id $id, ?string $avatarUrl, string $username, ?string $name, ?string $email, ?string $bio, string $githubUrl, ?string $blogUrl, ?string $company, ?string $location, int $publicRepositories, int $followers, int $followings, DateTimeImmutable $createdAt, ?DateTimeImmutable $updatedAt = null)
     {
         parent::__construct($id, $createdAt, $updatedAt);
 
@@ -33,6 +34,7 @@ class GithubUser extends BaseEntity implements GithubUserInterface
         $this->avatarUrl = $avatarUrl;
         $this->username = $username;
         $this->name = $name;
+        $this->email = $email;
         $this->bio = $bio;
         $this->githubUrl = $githubUrl;
         $this->blogUrl = $blogUrl;
@@ -69,6 +71,13 @@ class GithubUser extends BaseEntity implements GithubUserInterface
                 FILTER_FLAG_PATH_REQUIRED) === false,
             new InvalidArgumentException("Invalid Github url")
         );
+
+        if (!empty($this->email)) {
+            throw_if(
+                filter_var($this->email, FILTER_VALIDATE_EMAIL) === false,
+                new InvalidArgumentException("Invalid user email")
+            );
+        }
 
         if (!empty($this->blogUrl)) {
             throw_if(
@@ -124,6 +133,14 @@ class GithubUser extends BaseEntity implements GithubUserInterface
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
     }
 
     /**

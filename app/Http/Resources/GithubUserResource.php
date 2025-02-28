@@ -31,6 +31,12 @@ use OpenApi\Annotations as OA;
  *     ),
  *
  *     @OA\Property(
+ *          property="email",
+ *          type="string",
+ *          description="E-mail"
+ *     ),
+ *
+ *     @OA\Property(
  *          property="bio",
  *          type="string",
  *          description="Bio"
@@ -95,6 +101,7 @@ class GithubUserResource extends JsonResource
             'avatar' => $this->githubUser->getAvatarUrl(),
             'name' => $this->githubUser->getName(),
             'username' => $this->githubUser->getUsername(),
+            'email' => $this->githubUser->getEmail(),
             'bio' => $this->githubUser->getBio(),
             'githubUrl' => $this->githubUser->getGithubUrl(),
             'blogUrl' => $this->githubUser->getBlogUrl(),

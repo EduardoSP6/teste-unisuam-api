@@ -28,6 +28,7 @@ class GithubUserRepository implements GithubUserRepositoryInterface
             avatarUrl: $userOutputDto->avatarUrl,
             username: $userOutputDto->username,
             name: $userOutputDto->name,
+            email: $userOutputDto->email,
             bio: $userOutputDto->bio,
             githubUrl: $userOutputDto->githubUrl,
             blogUrl: $userOutputDto->blogUrl,
